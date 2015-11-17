@@ -54,13 +54,27 @@ public class GazePointDataProcessor {
         // Get all files from this directory.
         File directory = new File(args[0]);
         File files[] = directory.listFiles();
+        File[] formattedCsvFiles = new File[files.length];
+        int index = 0;
 
+        // Preprocess data: Select desired columns.
         for (int i = 0; i < files.length; i++) {
             GazePointDataProcessor gpProcessor = new GazePointDataProcessor();
             File dataFile = files[i];
+            //System.out.println(dataFile.getName());
             processFile(dataFile, gpProcessor);
-            writeFile(gpProcessor, new File("processed_" + dataFile.getName()));
+            String[] fileName = dataFile.getName().split("\\.");
+            // Make sure the file name does not contain any dot character. If not,
+            // it will generate index out of bound or the new name is not correct.
+            String newName = fileName[0] + "_processed." + fileName[1];
+            File outFile = new File(newName);
+            formattedCsvFiles[index++] = outFile;
+            writeFile(gpProcessor, outFile);
         }
+
+        // After having all the desired csv file, combine then into a single training data file.
+        TrainingDataGenerator tdGenerator = new TrainingDataGenerator(formattedCsvFiles);
+        tdGenerator.generateUnifiedDataFile();
     }
 
     /**
@@ -93,10 +107,10 @@ public class GazePointDataProcessor {
                     || Math.abs(dataLine.get(0) - 0.0) < 1E-14 || Math.abs(dataLine.get(0) - 1.0) < 1E-14)
                     && (dataLine.get(1) > 0 && dataLine.get(1) < 1
                     || Math.abs(dataLine.get(1) - 0.0) < 1E-14 || Math.abs(dataLine.get(1) - 1.0) < 1E-14)
-//                    && (dataLine.get(3) > 0 && dataLine.get(3) < 1
-//                    || Math.abs(dataLine.get(3) - 0.0) < 1E-14 || Math.abs(dataLine.get(3) - 1.0) < 1E-14)
-//                    && (dataLine.get(4) > 0 && dataLine.get(4) < 1
-//                    || Math.abs(dataLine.get(4) - 0.0) < 1E-14 || Math.abs(dataLine.get(4) - 1.0) < 1E-14)
+                    //                    && (dataLine.get(3) > 0 && dataLine.get(3) < 1
+                    //                    || Math.abs(dataLine.get(3) - 0.0) < 1E-14 || Math.abs(dataLine.get(3) - 1.0) < 1E-14)
+                    //                    && (dataLine.get(4) > 0 && dataLine.get(4) < 1
+                    //                    || Math.abs(dataLine.get(4) - 0.0) < 1E-14 || Math.abs(dataLine.get(4) - 1.0) < 1E-14)
                     && (dataLine.get(2) > 0)) {
                 // Add into our linked list.
                 gpProcessor.data.add(dataLine);

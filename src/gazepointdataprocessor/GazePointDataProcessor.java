@@ -36,7 +36,7 @@ public class GazePointDataProcessor {
      */
     public GazePointDataProcessor() {
         keepingIndices = new int[]{
-            5, 6, 8, 11, 12
+            5, 6, 8
         };
         titles = new ArrayList<>(keepingIndices.length);
         data = new LinkedList<>();
@@ -93,10 +93,10 @@ public class GazePointDataProcessor {
                     || Math.abs(dataLine.get(0) - 0.0) < 1E-14 || Math.abs(dataLine.get(0) - 1.0) < 1E-14)
                     && (dataLine.get(1) > 0 && dataLine.get(1) < 1
                     || Math.abs(dataLine.get(1) - 0.0) < 1E-14 || Math.abs(dataLine.get(1) - 1.0) < 1E-14)
-                    && (dataLine.get(3) > 0 && dataLine.get(3) < 1
-                    || Math.abs(dataLine.get(3) - 0.0) < 1E-14 || Math.abs(dataLine.get(3) - 1.0) < 1E-14)
-                    && (dataLine.get(4) > 0 && dataLine.get(4) < 1
-                    || Math.abs(dataLine.get(4) - 0.0) < 1E-14 || Math.abs(dataLine.get(4) - 1.0) < 1E-14)
+//                    && (dataLine.get(3) > 0 && dataLine.get(3) < 1
+//                    || Math.abs(dataLine.get(3) - 0.0) < 1E-14 || Math.abs(dataLine.get(3) - 1.0) < 1E-14)
+//                    && (dataLine.get(4) > 0 && dataLine.get(4) < 1
+//                    || Math.abs(dataLine.get(4) - 0.0) < 1E-14 || Math.abs(dataLine.get(4) - 1.0) < 1E-14)
                     && (dataLine.get(2) > 0)) {
                 // Add into our linked list.
                 gpProcessor.data.add(dataLine);

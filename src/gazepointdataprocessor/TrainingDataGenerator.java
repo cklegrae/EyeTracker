@@ -43,6 +43,12 @@ public class TrainingDataGenerator {
     public File generateUnifiedDataFile() throws FileNotFoundException {
         // The generated file will be traingData.csv
         PrintWriter fileWriter = new PrintWriter(unifiedDataFile);
+        fileWriter.println("[0:0],[0:1],[0:2],[0:3],[0:4],"
+                + "[1:0],[1:1],[1:2],[1:3],[1:4],"
+                + "[2:0],[2:1],[2:2],[2:3],[2:4],"
+                + "[3:0],[3:1],[3:2],[3:3],[3:4],"
+                + "[4:0],[4:1],[4:2],[4:3],[4:4],"
+                + "Game");
         // Process cvs files one by one.
         for (int i = 0; i < csvFiles.length; i++) {
             fileWriter.println(extractData(csvFiles[i]));
@@ -103,7 +109,7 @@ public class TrainingDataGenerator {
         String dataSummation = "";
         for (int i = 0; i < durationDistribution.length; i++) {
             for (int j = 0; j < durationDistribution[0].length; j++) {
-                dataSummation += durationDistribution[i][j] + ",";
+                dataSummation += (float)(durationDistribution[i][j]) + ",";
             }
         }
         // Append the activity of this data by its file name.

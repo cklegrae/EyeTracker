@@ -96,7 +96,8 @@ public class GazePointDataProcessor {
                     && (dataLine.get(3) > 0 && dataLine.get(3) < 1
                     || Math.abs(dataLine.get(3) - 0.0) < 1E-14 || Math.abs(dataLine.get(3) - 1.0) < 1E-14)
                     && (dataLine.get(4) > 0 && dataLine.get(4) < 1
-                    || Math.abs(dataLine.get(4) - 0.0) < 1E-14 || Math.abs(dataLine.get(4) - 1.0) < 1E-14)) {
+                    || Math.abs(dataLine.get(4) - 0.0) < 1E-14 || Math.abs(dataLine.get(4) - 1.0) < 1E-14)
+                    && (dataLine.get(2) > 0)) {
                 // Add into our linked list.
                 gpProcessor.data.add(dataLine);
             }

@@ -22,15 +22,19 @@ public class TrainingDataGenerator {
     private File[] csvFiles;
     // Each cvs data is mapped to a line in the unified data file.
     private File unifiedDataFile;
+    // Dimension.
+    private int dimension;
 
     /**
      * Constructor taking an array of csv Files.
      *
      * @param csvFiles
+     * @param dimension
      */
-    public TrainingDataGenerator(File[] csvFiles) {
+    public TrainingDataGenerator(File[] csvFiles, int dimension) {
         this.csvFiles = csvFiles;
         unifiedDataFile = new File("trainingData.csv");
+        this.dimension = dimension;
     }
 
     /**
@@ -43,12 +47,12 @@ public class TrainingDataGenerator {
     public File generateUnifiedDataFile() throws FileNotFoundException {
         // The generated file will be traingData.csv
         PrintWriter fileWriter = new PrintWriter(unifiedDataFile);
-        fileWriter.println("[0:0],[0:1],[0:2],[0:3],[0:4],"
-                + "[1:0],[1:1],[1:2],[1:3],[1:4],"
-                + "[2:0],[2:1],[2:2],[2:3],[2:4],"
-                + "[3:0],[3:1],[3:2],[3:3],[3:4],"
-                + "[4:0],[4:1],[4:2],[4:3],[4:4],"
-                + "Game");
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                fileWriter.print("[" + i + ":" + j + "],");
+            }
+        }
+        fileWriter.println("Game");
         // Process cvs files one by one.
         for (int i = 0; i < csvFiles.length; i++) {
             fileWriter.println(extractData(csvFiles[i]));
@@ -68,7 +72,7 @@ public class TrainingDataGenerator {
         Scanner fileReader = new Scanner(csvFile);
         // Create a 5x5 table. Each cell is a small area of the screen.
         // The value of each cell is the total eye fixation within that area.
-        double[][] durationDistribution = new double[5][5];
+        double[][] durationDistribution = new double[dimension][dimension];
         if (fileReader.hasNextLine()) {
             // Read titles.
             fileReader.nextLine();
@@ -81,26 +85,10 @@ public class TrainingDataGenerator {
                 doubleData[i] = Double.valueOf(strData[i]);
             }
             // Figure out which cell should this data belong to.
-            double x = doubleData[0];
-            double y = doubleData[1];
+            int x = (int) doubleData[0].doubleValue();
+            int y = (int) doubleData[1].doubleValue();
             double duration = doubleData[2];
-            int xIndex = (int) Math.ceil(x * 10);
-            if (xIndex != 0) {
-                if (xIndex % 2 == 0) {
-                    xIndex = xIndex / 2 - 1;
-                } else {
-                    xIndex = xIndex / 2;
-                }
-            }
-            int yIndex = (int) Math.ceil(y * 10);
-            if (yIndex != 0) {
-                if (yIndex % 2 == 0) {
-                    yIndex = yIndex / 2 - 1;
-                } else {
-                    yIndex = yIndex / 2;
-                }
-            }
-            durationDistribution[xIndex][yIndex] += duration;
+            durationDistribution[x][y] += duration;
         }
         // Close file after reading.
         fileReader.close();
@@ -109,7 +97,7 @@ public class TrainingDataGenerator {
         String dataSummation = "";
         for (int i = 0; i < durationDistribution.length; i++) {
             for (int j = 0; j < durationDistribution[0].length; j++) {
-                dataSummation += (float)(durationDistribution[i][j]) + ",";
+                dataSummation += (float) (durationDistribution[i][j]) + ",";
             }
         }
         // Append the activity of this data by its file name.

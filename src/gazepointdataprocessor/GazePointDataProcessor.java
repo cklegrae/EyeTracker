@@ -31,6 +31,13 @@ public class GazePointDataProcessor {
     // Processed data.
     private LinkedList<ArrayList<Double>> data;
 
+    // Dimension of the screen matrix.
+    public static final int matrixDimension = 20;
+
+    // The screen ratio will be converted into this value.
+    // It must be multiple of 10.
+    public static final int range = 100;
+
     /**
      * Constructor with default keeping indices.
      */
@@ -51,6 +58,7 @@ public class GazePointDataProcessor {
      */
     public static void main(String[] args) throws FileNotFoundException {
         // TODO code application logic here
+
         // Get all files from this directory.
         File directory = new File(args[0]);
         File files[] = directory.listFiles();
@@ -73,7 +81,7 @@ public class GazePointDataProcessor {
         }
 
         // After having all the desired csv file, combine then into a single training data file.
-        TrainingDataGenerator tdGenerator = new TrainingDataGenerator(formattedCsvFiles);
+        TrainingDataGenerator tdGenerator = new TrainingDataGenerator(formattedCsvFiles, matrixDimension);
         tdGenerator.generateUnifiedDataFile();
     }
 
@@ -107,10 +115,6 @@ public class GazePointDataProcessor {
                     || Math.abs(dataLine.get(0) - 0.0) < 1E-14 || Math.abs(dataLine.get(0) - 1.0) < 1E-14)
                     && (dataLine.get(1) > 0 && dataLine.get(1) < 1
                     || Math.abs(dataLine.get(1) - 0.0) < 1E-14 || Math.abs(dataLine.get(1) - 1.0) < 1E-14)
-                    //                    && (dataLine.get(3) > 0 && dataLine.get(3) < 1
-                    //                    || Math.abs(dataLine.get(3) - 0.0) < 1E-14 || Math.abs(dataLine.get(3) - 1.0) < 1E-14)
-                    //                    && (dataLine.get(4) > 0 && dataLine.get(4) < 1
-                    //                    || Math.abs(dataLine.get(4) - 0.0) < 1E-14 || Math.abs(dataLine.get(4) - 1.0) < 1E-14)
                     && (dataLine.get(2) > 0)) {
                 // Add into our linked list.
                 gpProcessor.data.add(dataLine);
@@ -141,11 +145,30 @@ public class GazePointDataProcessor {
         ListIterator<ArrayList<Double>> iterator = gpProcessor.data.listIterator();
         while (iterator.hasNext()) {
             ArrayList<Double> dataLine = iterator.next();
-            for (int i = 0; i < dataLine.size(); i++) {
-                writer.print(dataLine.get(i));
+            int numberOfStable = 1;
+            int interval = range / matrixDimension;
+            // For the axis.
+            for (int i = 0; i < dataLine.size() - numberOfStable; i++) {
+                Double col = dataLine.get(i);
+                int value = (int) Math.ceil(col * range);
+                if (value != 0) {
+                    if (value % interval == 0) {
+                        value = value / interval - 1;
+                    } else {
+                        value = value / interval;
+                    }
+                }
+                writer.print(value);
+                writer.print(",");
+            }
+
+            for (int i = dataLine.size() - numberOfStable; i < dataLine.size(); i++) {
+                Double col = dataLine.get(i);
+                writer.print(col);
                 if (i != dataLine.size() - 1) {
                     writer.print(",");
-                } else {
+                } // for the last element.
+                else {
                     writer.println();
                 }
             }

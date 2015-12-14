@@ -21,7 +21,7 @@ import java.net.UnknownHostException;
 
 /**
  *
- * @author Thien Dinh & Cody
+ * @author Thien Dinh & Cody Klegraefe
  */
 public class ServerCommunicator {
 

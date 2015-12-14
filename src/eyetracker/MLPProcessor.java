@@ -15,7 +15,7 @@ import weka.core.Utils;
 
 /**
  *
- * @author Thien Dinh & Cody
+ * @author Thien Dinh & Cody Klegraefe
  */
 public class MLPProcessor {
     

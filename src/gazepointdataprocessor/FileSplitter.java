@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 /**
  * This class is used to split the 2-minute data file into 2 one-minute data files.
- * @author Thien Dinh & Cody
+ * @author Thien Dinh & Cody Klegraefe
  */
 public class FileSplitter {
 

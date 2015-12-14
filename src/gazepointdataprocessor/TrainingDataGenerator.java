@@ -18,7 +18,7 @@ import java.util.Scanner;
  * This class is used to process multiple csv files to a single data file. Each
  * csv file is mapped to one line of data in the data file.
  *
- * @author Thien Dinh & Cody
+ * @author Thien Dinh & Cody Klegraefe
  */
 public class TrainingDataGenerator {
 

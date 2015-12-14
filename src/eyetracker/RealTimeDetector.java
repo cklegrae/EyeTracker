@@ -19,7 +19,7 @@ import weka.core.Instance;
 
 /**
  *
- * @author Thien Dinh & Cody
+ * @author Thien Dinh & Cody Klegraefe
  */
 public class RealTimeDetector implements Runnable {
 
